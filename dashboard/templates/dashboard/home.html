@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content%}
+<div class="jumbotron">
+<div class="container">
+
+{% if new_user %}
+
+
+<h1>deftdev WELCOMES YOU</h1>
+{% if question_instance %}
+{% include "questions/user_response_form.html" with instance=question_instance form=question_form %}
+{% else %}
+you have answered all.
+{% endif %}
+
+{% else %}
+
+<div class='row'>
+  <div class='col-sm-4'>
+    <h1>Dashboard</h1>
+{% if question_instance %}
+{% include "questions/user_response_form.html" with instance=question_instance form=question_form title_size=2 %}
+{% else %}
+</div>
+YOU HAVE ANSWERED ALL QUESTIONS.TRY BACK LATER.
+
+
+{% endif %}
+
+{% if mutual_likes %}
+
+<div class='col-sm-4'>
+  <h2>liked_user</h2>
+{% for liked_user in mutual_likes %}
+<a href="{{liked_user.profile.get_absolute_url }}">
+{{ liked_user }}
+</a>
+
+{% if match_user.profile.picture %}
+<img src='{{ liked_user.profile.picture.url }}' class='img-responsive' height="100" width="100" />
+{% else %}
+<img src='{% static "img/marketing1.jpg" %}' class='img-responsive'  height="100" width="100" />
+{% endif %}
+
+{{ percent }}
+</div>
+</div>
+{% endfor %}
+
+{% endif %}
+
+<div class='col-sm-4'>
+  <h2>Matches</h2>
+{% for match_user, percent in matches %}
+<a href="{{match_user.profile.get_absolute_url }}">
+{{ match_user }}
+</a>
+
+{% if match_user.profile.picture %}
+<img src='{{ match_user.profile.picture.url }}' class='img-responsive' height="100" width="100" />
+{% else %}
+<img src='{% static "marketing1.jpg" %}' class='img-responsive'  height="100" width="100" />
+{% endif %}
+
+{{ percent }}
+</div>
+</div>
+{% endfor %}
+
+<div class="col-sm-12">
+  <h3>Suggested positions<h3/>
+    <hr/>
+    {% for pos in positions %}
+    <div class="col-sm-4 text-center ">
+      <p class="lead"><a href="{{ pos.get_match_url }}">{{ pos.job.text }}<a/><p/>
+        </div>
+
+   {% endfor %}
+
+   <div class="col-sm-12">
+     <h3>Suggested locations<h3/>
+       <hr/>
+       {% for pos in locations %}
+       <div class="col-sm-4 text-center ">
+         <p class="lead"><a href="{{ pos.get_match_url }}">{{ pos.location.name }}</a><p/>
+           </div>
+
+      {% endfor %}
+
+      <div class="col-sm-12">
+        <h3>Suggested employers<h3/>
+          <hr/>
+          {% for pos in employers %}
+          <div class="col-sm-4 text-center ">
+            <p class="lead"><a href="{{ pos.get_match_url }}">{{ pos.employer.name }}<a/><p/>
+              </div>
+
+
+         {% endfor %}
+
+
+
+
+
+<!-- <form method="POST" action=''>{% csrf_token %}
+<h1>{{instance.text}}</h1>
+<input type="hidden" name="question_id" value="{{instance.id}}" />
+{% for ans in instance.answer_set.all %}
+<input type='radio' name='answer_id' value="{{ ans.id }}"/>{{ans.text}}<br/>
+{% endfor %}
+<input type='submit' value='Save and continue'>
+</form>
+ -->
+
+{% endif %}
+</div>
+</div>
+
+{% endblock %}

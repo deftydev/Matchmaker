@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<strong>{{profile.user}}<strong/>
+{% if profile.picture %}
+<img src="{{profile.picture.url}}" height="300" width="300"/>
+{% else %}
+<img src='{% static "marketing1.jpg "%}' />
+{% endif %}
+
+{% if jobs %}
+<ul>
+{% for job in jobs %}
+
+<li>{{ job.position }} in {{ job.location }} at {{ job.employer_name }}<li/>
+
+{% endfor %}
+
+<a href="{% url 'jobs_edit' %}"> Edit jobs<a/>.
+<ul/>
+{% else %}
+<p class="lead">
+  You do not currently have jobs.<a href="{% url 'job_add' %}"> Add some<a/>.
+<p/>
+
+{% endif %}
+
+{% endblock %}
